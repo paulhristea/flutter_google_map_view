@@ -205,16 +205,16 @@ class MapViewPlugin(val activity: Activity) : MethodCallHandler {
                     return
                 }
                 val mapOptions = call.argument<Map<String, Any>>("mapOptions")
-                val cameraDict = mapOptions["cameraPosition"] as Map<String, Any>
+                val cameraDict = if (mapOptions != null) mapOptions["cameraPosition"] as Map<String, Any> else emptyMap<String, Any>()
                 initialCameraPosition = getCameraPosition(cameraDict)
                 toolbarActions = getToolbarActions(call.argument<List<Map<String, Any>>>("actions"))
-                showUserLocation = mapOptions["showUserLocation"] as Boolean
-                showMyLocationButton = mapOptions["showMyLocationButton"] as Boolean
-                showCompassButton = mapOptions["showCompassButton"] as Boolean
-                hideToolbar = mapOptions["hideToolbar"] as Boolean
-                mapTitle = mapOptions["title"] as String
+                showUserLocation = if (mapOptions != null) mapOptions["showUserLocation"] as Boolean else false
+                showMyLocationButton = if (mapOptions != null) mapOptions["showMyLocationButton"] as Boolean else false 
+                showCompassButton = if (mapOptions != null) mapOptions["showCompassButton"] as Boolean else false
+                hideToolbar = if (mapOptions != null) mapOptions["hideToolbar"] as Boolean else false
+                mapTitle = if (mapOptions != null) mapOptions["title"] as String else ""
 
-                if (mapOptions["mapViewType"] != null) {
+                if (mapOptions != null && mapOptions["mapViewType"] != null) {
                     val mappedMapType: Int? = mapTypeMapping.get(mapOptions["mapViewType"]);
                     if (mappedMapType != null) mapViewType = mappedMapType;
                 }
